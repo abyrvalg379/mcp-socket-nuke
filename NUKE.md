@@ -101,9 +101,9 @@ FBX/Alembic-тулов НЕТ (v0.1) — композ не таскает гео
 - `tests/socket_smoke.py` (копия общего `work\smoke\socket_smoke.py`) — живой Nuke,
   read-only, 5 проверок.
 
-## Бэклог v0.2 (не делать впрок)
+## Что дальше
 
-Пуш-ивенты (addOnCreate/KnobChanged → клиент), doc-search, version-gating NukeX/17+
-(splat/bigcat), FBX/Alembic — по реальной задаче. Чужие репо-референсы:
-kleer001/nuke-mcp (57 тулов, Nuke 17.0v1 — источник подтверждения
-`executeInMainThread`), linchpinhq/nuke-mcp (Node.js, сырой).
+Роадмэп не публикуется — фичи делаются по триггеру из реальных задач
+(философия семьи mcp-socket: тонкий набор тулов + `execute_nuke_code`-лаз).
+FBX/Alembic-тулов в v0.1 нет намеренно — композ не таскает геометрию мостом;
+если понадобится, делать по образцу Maya-ветки.
