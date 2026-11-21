@@ -76,7 +76,7 @@ from typing import Any, Dict, Optional
 import nuke
 
 _TAG = "[MCP_Socket_Nuke]"
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 
 _DEFAULT_HOST = "127.0.0.1"
 _DEFAULT_PORT = 9897          # Blender 9876, Maya 7777, Houdini 9877
@@ -781,7 +781,15 @@ class MCPSocketServer:
         for offset in range(_PORT_OFFSETS + 1):
             candidate = self.preferred_port + offset
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            if os.name == 'nt':
+                # Windows: SO_REUSEADDR lets a SECOND Nuke bind the same port
+                # successfully (both listen, all connections go to the first
+                # binder) so the multi-Nuke fallback to 9898+ never triggered.
+                # An exclusive bind makes "port busy" honest and the port
+                # offset actually work.
+                sock.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
+            else:
+                sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             try:
                 sock.bind((self.host, candidate))
             except OSError as exc:
